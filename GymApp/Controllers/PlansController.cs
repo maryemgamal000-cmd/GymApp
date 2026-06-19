@@ -1,4 +1,5 @@
-﻿using GymApp.DBContexts;
+﻿
+using GymSystem.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,20 +7,28 @@ namespace GymApp.Controllers
 {
     public class PlansController : Controller
     {
-        private readonly GymDbContext dbContext;
+        //private readonly GymDbContext dbContext;
 
-        public PlansController()
+        //public PlansController()
+        //{
+        //    dbContext = new GymDbContext();
+        //}
+
+        //dependency injection
+        private readonly IPlanRepository planRepository;
+
+        public PlansController(IPlanRepository repository)
         {
-            dbContext = new GymDbContext();
+            this.planRepository = repository;
         }
+
 
 
         //Index Action (Default) ==> Get all plans
         //Get (BaseUrl/Plans)
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
-
-            var plans = await dbContext.Plans.ToListAsync();    
+            var plans = await planRepository.GetAllAsync(ct:ct);
             return View(plans);
         }
 
@@ -27,9 +36,9 @@ namespace GymApp.Controllers
 
         //Details Action
         //Get (BaseUrl/Plan/Details/id)
-        public async Task<IActionResult>Details(int id)
+        public async Task<IActionResult>Details(int id , CancellationToken ct)
         {
-            var plan = await dbContext.Plans.FindAsync(id);
+            var plan = await planRepository.GetByIDAsync(id,ct);
 
             if(plan is null )
                 return NotFound();

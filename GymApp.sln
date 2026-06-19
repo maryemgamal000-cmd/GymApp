@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymApp", "GymApp\GymApp.csproj", "{60758F06-D167-4E8A-9ED5-59CBDBA7DDBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymSystem.PL", "GymApp\GymSystem.PL.csproj", "{60758F06-D167-4E8A-9ED5-59CBDBA7DDBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymSystem.DAL", "GymSystem.DAL\GymSystem.DAL.csproj", "{5C485998-F308-4D33-A06D-ED522E3130B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymSystem.BLL", "GymSystem.BLL\GymSystem.BLL.csproj", "{BEAF51B9-81EA-4884-9313-A43259852740}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{60758F06-D167-4E8A-9ED5-59CBDBA7DDBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60758F06-D167-4E8A-9ED5-59CBDBA7DDBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60758F06-D167-4E8A-9ED5-59CBDBA7DDBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C485998-F308-4D33-A06D-ED522E3130B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C485998-F308-4D33-A06D-ED522E3130B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C485998-F308-4D33-A06D-ED522E3130B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C485998-F308-4D33-A06D-ED522E3130B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEAF51B9-81EA-4884-9313-A43259852740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEAF51B9-81EA-4884-9313-A43259852740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEAF51B9-81EA-4884-9313-A43259852740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEAF51B9-81EA-4884-9313-A43259852740}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
