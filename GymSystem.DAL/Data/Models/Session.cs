@@ -18,7 +18,7 @@ namespace GymSystem.DAL.Data.Models
         public DateTime EndDate { get; set; }
 
 
-        #region Relation
+        #region Relations
         public Trainer Trainer { get; set; }
         public int TrainerId { get; set; }  //FK
 

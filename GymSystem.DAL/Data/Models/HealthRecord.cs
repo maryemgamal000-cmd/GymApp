@@ -9,7 +9,7 @@ namespace GymSystem.DAL.Data.Models
     public class HealthRecord : BaseEntity
     {
         public decimal Height { get; set; } 
-        public decimal Width { get; set; }
+        public decimal Weight { get; set; }
 
         public string? Note { get; set; }
 

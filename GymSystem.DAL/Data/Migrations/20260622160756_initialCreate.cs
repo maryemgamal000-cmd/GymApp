@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace GymSystem.DAL.Data.Migrations
+namespace GymSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,7 @@ namespace GymSystem.DAL.Data.Migrations
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateofBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Address_Street = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Address_City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
                     Address_BuildingNumber = table.Column<int>(type: "int", nullable: false),
@@ -84,7 +84,7 @@ namespace GymSystem.DAL.Data.Migrations
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateofBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Address_Street = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Address_City = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
                     Address_BuildingNumber = table.Column<int>(type: "int", nullable: false),
@@ -104,7 +104,7 @@ namespace GymSystem.DAL.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Width = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     BloodType = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
                     MemberID = table.Column<int>(type: "int", nullable: false),

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GymSystem.DAL.Data.Migrations
+namespace GymSystem.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
     partial class GymDbContextModelSnapshot : ModelSnapshot
@@ -141,7 +141,7 @@ namespace GymSystem.DAL.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Width")
+                    b.Property<decimal>("Weight")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -166,7 +166,7 @@ namespace GymSystem.DAL.Data.Migrations
                         .HasColumnName("JoinDate")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<DateOnly>("DateofBirth")
+                    b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
@@ -345,7 +345,7 @@ namespace GymSystem.DAL.Data.Migrations
                         .HasColumnName("HireDate")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<DateOnly>("DateofBirth")
+                    b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")

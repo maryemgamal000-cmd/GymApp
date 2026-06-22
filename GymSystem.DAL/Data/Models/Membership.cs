@@ -18,13 +18,15 @@ namespace GymSystem.DAL.Data.Models
 
 
         //Relations
-        public Member Member { get; set; }  
-        public int MemberId { get; set; }   
+        #region Relations
+        public Member Member { get; set; }
+        public int MemberId { get; set; }
 
 
 
-        public Plan Plan { get; set; }   
-        public int PlanId { get; set; } 
+        public Plan Plan { get; set; }
+        public int PlanId { get; set; }  
+        #endregion
 
 
     }

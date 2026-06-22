@@ -1,3 +1,5 @@
+using GymSystem.BLL.Services.Classes;
+using GymSystem.BLL.Services.Interfaces;
 using GymSystem.DAL.Data.DBContexts;
 using GymSystem.DAL.Repositories.Classes;
 using GymSystem.DAL.Repositories.Interfaces;
@@ -13,8 +15,14 @@ namespace GymApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            //dependency injection
-            builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+
+            
+            builder.Services.AddScoped(typeof(IGenericRepository<>) , typeof(GenericRepository<>));
+
+            builder.Services.AddScoped<IMemberService ,MemberService>();
+
+
+            //connection String
             builder.Services.AddDbContext<GymDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
