@@ -15,12 +15,14 @@ namespace GymSystem.DAL.Repositories.Interfaces
 
         Task<TEntity?> GetByIDAsync(int id, CancellationToken ct = default);
 
-        Task<int> AddAsync(TEntity entity, CancellationToken ct = default);
+        void Add(TEntity entity);
 
-        Task<int> UpdateAsync(TEntity entity, CancellationToken ct = default);
+        void Update(TEntity entity);
 
-        Task<int> DeleteAsync(TEntity entity, CancellationToken ct = default);
+        void Delete(TEntity entity);
         Task<bool> AnyAsync(Expression<Func<TEntity , bool>> Perdicit, CancellationToken ct = default);
+
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> Perdicit, bool tracking = false, CancellationToken ct = default);
 
     }
 }

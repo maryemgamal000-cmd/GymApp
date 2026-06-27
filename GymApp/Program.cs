@@ -15,11 +15,14 @@ namespace GymApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-            
             builder.Services.AddScoped(typeof(IGenericRepository<>) , typeof(GenericRepository<>));
-
             builder.Services.AddScoped<IMemberService ,MemberService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
+
+
 
 
             //connection String
