@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GymSystem.BLL.ViewModels.PlanViewModels
+{
+    public class PlanToUpdateViewModel
+
+    {
+        public string? PlanName { get; set; }
+
+
+        [Required(ErrorMessage ="Description is required")]
+        [StringLength(200, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 200 ") ]
+        public string Description { get; set; }
+
+
+
+        [Required(ErrorMessage = "Price is required")]
+        [Range(0.01 , 10000, ErrorMessage = "price must be greater than 0 ")]
+
+        public decimal Price { get; set; }
+
+
+        [Required(ErrorMessage = "Duration is required")]
+        [Range(1, 365, ErrorMessage = "Duration must be be between 1 and 365 Days  ")]
+        public int DurationDays { get; set; }
+    }
+}

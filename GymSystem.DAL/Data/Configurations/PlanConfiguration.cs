@@ -1,7 +1,7 @@
-﻿using GymApp.Models;
+﻿using GymSystem.DAL.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GymApp.Configurations
+namespace GymSystem.DAL.Data.Configurations
 {
     public class PlanConfiguration : IEntityTypeConfiguration<Plan>
     {
