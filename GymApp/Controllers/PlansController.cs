@@ -1,6 +1,7 @@
 ﻿
 using GymSystem.BLL.Services.Interfaces;
 using GymSystem.BLL.ViewModels.PlanViewModels;
+using GymSystem.BLL.ViewModels.SessionViewModels;
 using GymSystem.DAL.Data.Models;
 using GymSystem.DAL.Repositories.Classes;
 using GymSystem.DAL.Repositories.Interfaces;
@@ -25,7 +26,10 @@ namespace GymApp.Controllers
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             var plans = await _planService.GetAllPlansAsync(ct);
-            return View(plans);
+            if (plans.success) return View(plans.value); 
+            return View(new List<PlanViewModel>());
+
+           
         }
 
 
@@ -34,15 +38,15 @@ namespace GymApp.Controllers
         //Get (BaseUrl/Plan/Details/id)
         public async Task<IActionResult> Details(int id, CancellationToken ct)
         {
-            var plan = await _planService.GetPlanDetailsByIdAsync(id, ct);
-            if (plan == null)
+            var result = await _planService.GetPlanDetailsByIdAsync(id, ct);
+            if (!result.success)
             {
-                TempData["ErrorMessage"] = "Plan Not Found";
+                TempData["ErrorMessage"] = result.error;
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                return View(plan);
+                return View(result.value);
             }
         }
 
@@ -53,15 +57,15 @@ namespace GymApp.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPlan(int id, CancellationToken ct)
         {
-            var plan = await _planService.GetPlanToUpdateAsync(id, ct);
-            if (plan == null)
+            var result = await _planService.GetPlanToUpdateAsync(id, ct);
+            if (!result.success)
             {
-                TempData["ErrorMessage"] = "Plan Not Found";
+                TempData["ErrorMessage"] = result.error;
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                return View(plan);
+                return View(result.value);
             }
 
         }
@@ -74,14 +78,14 @@ namespace GymApp.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await _planService.UpdatePlanDetailsAsync(id, model, ct);
-            if (result)
+            if (result.success)
             {
                 TempData["SuccessMessage"] = "Plan Updated Successfully";
 
             }
             else
             {
-                TempData["ErrorMessage"] = "Failed To Update Plan";
+                TempData["ErrorMessage"] = result.error;
 
             }
             return RedirectToAction(nameof(Index));
@@ -92,14 +96,12 @@ namespace GymApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePlanStatus (int id, CancellationToken ct)
         {
-            var plan = await _planService.ActivateOrDeactivatePlan(id, ct);
-            if (plan)
+            var result = await _planService.ActivateOrDeactivatePlan(id, ct);
+            if (result.success)
                 
                 TempData["SuccessMessage"] = "Plan Status Changed";
             else
-                TempData["ErrorMessage"] = "Cannot update status ,The plan might not exist or still has active member subscriptions";
-
-
+                TempData["ErrorMessage"] = result.error;
 
             return RedirectToAction(nameof(Index));
 

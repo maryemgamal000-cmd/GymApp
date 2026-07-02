@@ -20,7 +20,7 @@ namespace GymSystem.BLL.ViewModels.PlanViewModels
 
 
         [Required(ErrorMessage = "Price is required")]
-        [Range(0.01 , 10000, ErrorMessage = "price must be greater than 0 ")]
+        [Range(0.01 , 10000, ErrorMessage = "price must be  greater than 0 and the Max price is 10000 ")]
 
         public decimal Price { get; set; }
 

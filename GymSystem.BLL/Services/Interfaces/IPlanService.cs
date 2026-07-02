@@ -1,4 +1,5 @@
-﻿using GymSystem.BLL.ViewModels.PlanViewModels;
+﻿using GymSystem.BLL.Common;
+using GymSystem.BLL.ViewModels.PlanViewModels;
 using GymSystem.BLL.ViewModels.SessionViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,17 @@ namespace GymSystem.BLL.Services.Interfaces
     {
 
         //GetAllPlans
-        Task<IEnumerable<PlanViewModel>?> GetAllPlansAsync(CancellationToken ct = default);
+        Task<Result<IEnumerable<PlanViewModel>?>> GetAllPlansAsync(CancellationToken ct = default);
 
         //GetPlanDetailsById
-        Task<PlanViewModel?> GetPlanDetailsByIdAsync(int planId, CancellationToken ct=default);
+        Task<Result<PlanViewModel?>> GetPlanDetailsByIdAsync(int planId, CancellationToken ct = default);
 
         //EditPlan =2Actions
-        Task<PlanToUpdateViewModel?> GetPlanToUpdateAsync(int planId, CancellationToken ct = default);
-        Task<bool> UpdatePlanDetailsAsync(int planId, PlanToUpdateViewModel model, CancellationToken ct = default);
+        Task<Result<PlanToUpdateViewModel?>> GetPlanToUpdateAsync(int planId, CancellationToken ct = default);
+        Task<Result> UpdatePlanDetailsAsync(int planId, PlanToUpdateViewModel model, CancellationToken ct = default);
 
 
         //Active/Deactive
-        Task<bool> ActivateOrDeactivatePlan( int planId ,CancellationToken ct = default);
+        Task<Result> ActivateOrDeactivatePlan(int planId, CancellationToken ct = default);
     }
 }
