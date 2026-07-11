@@ -1,11 +1,14 @@
 using GymSystem.BLL;
+using GymSystem.BLL.Services.Attachment;
 using GymSystem.BLL.Services.Classes;
 using GymSystem.BLL.Services.Interfaces;
 using GymSystem.DAL.Data.DataSeeding;
 using GymSystem.DAL.Data.DBContexts;
+using GymSystem.DAL.Data.Models;
 using GymSystem.DAL.Repositories.Classes;
 using GymSystem.DAL.Repositories.Interfaces;
 using GymSystem.PL;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -27,8 +30,19 @@ namespace GymApp
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>( config =>
+                {
+                    config.User.RequireUniqueEmail = true;
+                    config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+                    config.Lockout.MaxFailedAccessAttempts = 5;
+                }).AddEntityFrameworkStores<GymDbContext>();  
+
+
 
             builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfile()));
+
+          
 
             //connection String
             builder.Services.AddDbContext<GymDbContext>(options =>
@@ -60,11 +74,12 @@ namespace GymApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
             app.Run();
         }

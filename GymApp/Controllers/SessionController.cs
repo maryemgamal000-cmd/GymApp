@@ -1,6 +1,7 @@
 ﻿using GymSystem.BLL.Common;
 using GymSystem.BLL.Services.Interfaces;
 using GymSystem.BLL.ViewModels.SessionViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace GymSystem.PL.Controllers
 {
+    [Authorize]
     public class SessionController : Controller 
     {
         private readonly ISessionService _sessionService;
@@ -59,7 +61,7 @@ namespace GymSystem.PL.Controllers
                 await PopulateDropDownListAsync();
                 return View(model);
             }
-
+           
             var result = await _sessionService.CreateSessionAsync( model, ct);
             if(result.success) 
             {
@@ -69,7 +71,14 @@ namespace GymSystem.PL.Controllers
 
             else 
             {
-                TempData["ErrorMessage"] = result.error;
+                if (result.error == "Cannot Create This Session To This Trainer")
+                {
+                    TempData["ErrorMessage"] = "Session cannot be added ,The selected trainer does not have the required specialty";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.error;
+                }
                 await PopulateDropDownListAsync();
                 return View(model);
             }

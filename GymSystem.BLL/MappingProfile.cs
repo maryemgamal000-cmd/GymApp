@@ -64,7 +64,7 @@ namespace GymSystem.BLL
                     Street = src.Street,
                     City = src.City
                 }))
-                .ForMember(dest => dest.HealthRecord, opt => opt.MapFrom(src => src.HealthRecordViewModel));
+                .ForMember(dest => dest.HealthRecord, opt => opt.MapFrom(src => src.HealthRecord));
 
         }
 

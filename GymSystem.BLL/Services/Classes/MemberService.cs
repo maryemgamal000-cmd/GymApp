@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using GymSystem.BLL.Common;
+using GymSystem.BLL.Services.Attachment;
 using GymSystem.BLL.Services.Interfaces;
 using GymSystem.BLL.ViewModels.MemberViewModels;
 using GymSystem.DAL.Data.Models;
 using GymSystem.DAL.Data.Models.Enums;
 using GymSystem.DAL.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +19,24 @@ namespace GymSystem.BLL.Services.Classes
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IAttachmentService _attachmentService;
+        private readonly ILogger _logger;
 
-        public MemberService(IUnitOfWork unitOfWork ,IMapper mapper) {
+        public MemberService(IUnitOfWork unitOfWork ,IMapper mapper , IAttachmentService attachmentService , ILogger<MemberService> logger) {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _attachmentService = attachmentService;
+            _logger = logger;
         }
 
 
 
         public async Task<Result> CreateMemberAsync(CreateMemberViewModel model, CancellationToken ct = default)
         {
+            if (model.PhotoFile == null || model.PhotoFile.Length == 0)
+            {
+                return Result.Validation("Please upload a valid profile photo");
+            }
             // check if email exist
             var emailexist = await _unitOfWork.GetRepository<Member>().AnyAsync(x => x.Email == model.Email, ct);
             if (emailexist) return Result.Fail("Email Already Exists");
@@ -35,12 +45,32 @@ namespace GymSystem.BLL.Services.Classes
             var phoneexist = await _unitOfWork.GetRepository<Member>().AnyAsync(x => x.Phone == model.Phone, ct);
             if (phoneexist) return Result.Fail("Phone Already Exists");
 
+            //Upload Photo 
+            var storedPhotoName =  await _attachmentService.UploadAsync(model.PhotoFile.OpenReadStream(), model.PhotoFile.FileName, "MembersPhoto" ,ct);
+            if (storedPhotoName == null || !storedPhotoName.success) 
+            {
+                return Result.Validation("Photo is invalid");
+            }
+
             // else true add member
             var member = _mapper.Map<CreateMemberViewModel, Member>(model);
-
+            member.Photo = storedPhotoName.value;
             _unitOfWork.GetRepository<Member>().Add(member); //Add Locally
             var saveResult = await _unitOfWork.SaveChangesAsync(ct);
-            return saveResult > 0 ? Result.Ok() : Result.Fail("Failed To Create Member");
+            if (saveResult > 0)
+            {
+                return Result.Ok();
+            }
+            else
+            {
+                // Delete Uploaded Photo
+                var deleteResult = _attachmentService.Delete(storedPhotoName.value!, "MembersPhoto");
+                if (!deleteResult.success)
+                {
+                    _logger.LogError(deleteResult.error);
+                }
+                return Result.Fail("Failed To Create Member");
+            }
         }
 
 
@@ -138,8 +168,30 @@ namespace GymSystem.BLL.Services.Classes
             if(hasFutureBookings ) return Result.Validation("Can Not Delete Member Has upcoming session bookings");
         
           _unitOfWork.GetRepository<Member>().Delete(member); //Delete Locally
-            var result = await _unitOfWork.SaveChangesAsync(ct);     
-            return result > 0 ? Result.Ok() : Result.Fail("Failed To Delete Memeber")     ;
+            var result = await _unitOfWork.SaveChangesAsync(ct);
+
+            if (result <= 0)
+            {
+                return Result.Fail("Failed To Delete Member");
+            }
+
+            var deleteResult = _attachmentService.Delete(member.Photo!, "MembersPhoto");
+
+
+            if (!deleteResult.success)
+            {
+                _logger.LogError(
+                    "Failed to delete member photo '{Photo}'. Error: {Error}",
+                    member.Photo,
+                    deleteResult.error);
+            }
+
+            return Result.Ok();
+
+
+
+
+
 
         }
     }

@@ -124,7 +124,7 @@ namespace GymSystem.BLL.Services.Classes
             if (category is null) return Result.NotFound("Category Not Found"); ;
 
             var isvalid = Enum.TryParse<Speciality>(category.CategoryName, true, out var categorySpeciality);
-            if (!isvalid) return Result.Validation("Cannot Create This Session To This Trainer");
+            if (!isvalid || trainer.Speciality != categorySpeciality) return Result.Validation("Cannot Create This Session To This Trainer");
 
             var session = _mapper.Map<CreateSessionViewModel, Session>(model);
 

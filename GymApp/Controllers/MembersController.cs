@@ -1,19 +1,62 @@
-﻿using GymSystem.BLL.Services.Interfaces;
+﻿using GymSystem.BLL.Common;
+using GymSystem.BLL.Services.Attachment;
+using GymSystem.BLL.Services.Interfaces;
 using GymSystem.BLL.ViewModels.MemberViewModels;
 using GymSystem.DAL.Data.Models;
 using GymSystem.DAL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymSystem.PL.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class MembersController : Controller
     {
         private readonly IMemberService _memberService;
+        private readonly IAttachmentService _attachmentService;
 
-        public MembersController(IMemberService memberService)
+        public MembersController(IMemberService memberService , IAttachmentService attachmentService )
         {
             _memberService = memberService;
+            _attachmentService = attachmentService;
         }
+
+        [HttpGet]
+
+        [HttpGet]
+        public async Task<IActionResult> Picture(int id)
+        {
+            var memberResult = await _memberService.GetMemberDetailsByIdAsync(id);
+
+            if (!memberResult.success)
+            {
+                TempData["ErrorMessage"]= memberResult.error;
+                return RedirectToAction(nameof(Index));
+               
+            }
+
+            var member = memberResult.value!;
+
+            if (string.IsNullOrWhiteSpace(member.Photo))
+               { TempData["ErrorMessage"] = memberResult.error;
+                return NotFound();
+            }
+
+
+            var fileResult = _attachmentService.GetFile(member.Photo, "MembersPhoto");
+
+            if (!fileResult.success)
+            {
+                TempData["ErrorMessage"] = fileResult.error;
+                return RedirectToAction(nameof(Index));
+            }
+
+            return File(fileResult.value!.Value.stream, fileResult.value.Value.contentType);
+
+
+
+        }
+
 
 
         //Get (All) [BaseUEL/Members/Index]
@@ -25,7 +68,7 @@ namespace GymSystem.PL.Controllers
             if (result.success) return View(result.value);
             else
             {
-                TempData["ErrorMessage"]=result.error;
+               
                 return View(Enumerable.Empty<MemberViewModel>());
             }
         }
@@ -44,12 +87,13 @@ namespace GymSystem.PL.Controllers
         //Post 
         //Create Action => Submit the member
         [HttpPost]
-        public async Task<IActionResult> CreateMember(CreateMemberViewModel model, CancellationToken ct)
+        public async Task<IActionResult> Create(CreateMemberViewModel model, CancellationToken ct)
         {
 
             if (!ModelState.IsValid)
             {
-                return View(nameof(Create), model);
+
+                return View(model);
             }
             else
             {
