@@ -24,5 +24,7 @@ namespace GymSystem.DAL.Repositories.Interfaces
 
         Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> Perdicit, bool tracking = false, CancellationToken ct = default);
 
+        Task<int> CountAsync(Expression<Func<TEntity, bool>>? condition = null , CancellationToken ct = default);
+    
     }
 }
